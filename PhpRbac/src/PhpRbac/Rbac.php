@@ -13,20 +13,43 @@ use \Jf;
  */
 class Rbac
 {
-    public function __construct($unit_test = '')
-    {
-        if ((string) $unit_test === 'unit_test') {
-            require_once dirname(dirname(__DIR__)) . '/tests/database/database.config';
-        } else {
-            require_once dirname(dirname(__DIR__)) . '/database/database.config';
-        }
+	const RBAC_ADAPTER_PDO = 'pdo_mysql';
+	const RBAC_ADAPTER_MYSQL = 'mysqli';
+	const RBAC_ADAPTER_SQLITE = 'pdo_sqlite';
 
-        require_once 'core/lib/Jf.php';
+	public function __construct($dbAdapter,
+								$dbHost,
+								$dbUser,
+								$dbPassword,
+								$dbName,
+								$dbTablePrefix = 'phprbac_',
+								$unit_test = '')
+	{
 
-        $this->Permissions = Jf::$Rbac->Permissions;
-        $this->Roles = Jf::$Rbac->Roles;
-        $this->Users = Jf::$Rbac->Users;
-    }
+		if ((string) $unit_test === 'unit_test') {
+			require_once dirname(dirname(__DIR__)) . '/tests/database/database.config';
+		} else {
+			$host=$dbHost;
+			$user=$dbUser;
+			$pass=$dbPassword;
+
+			$dbname=$dbName;
+
+			if (($dbAdapter === 'pdo_mysql') || ($dbAdapter === 'mysqli') || ($dbAdapter === 'pdo_sqlite')) {
+				$adapter = $dbAdapter;
+			} else {
+				throw new \Exception('wrong specified adapter for database');
+			}
+
+			$tablePrefix = $dbTablePrefix;
+		}
+
+		require_once 'core/lib/Jf.php';
+
+		$this->Permissions = Jf::$Rbac->Permissions;
+		$this->Roles = Jf::$Rbac->Roles;
+		$this->Users = Jf::$Rbac->Users;
+	}
 
     public function assign($role, $permission)
     {
