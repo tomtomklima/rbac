@@ -10,12 +10,19 @@ use \Jf;
  * @defgroup phprbac Rbac Functionality
  * @{
  * Documentation for all PhpRbac related functionality.
+ * 
+ * @property \PermissionManager Permissions
+ * @property \RoleManager       Roles
+ * @property \RbacUserManager   Users
  */
 class Rbac
 {
 	const RBAC_ADAPTER_PDO = 'pdo_mysql';
 	const RBAC_ADAPTER_MYSQL = 'mysqli';
 	const RBAC_ADAPTER_SQLITE = 'pdo_sqlite';
+    public $Permissions;
+    public $Roles;
+    public $Users;
 
 	public function __construct($dbAdapter,
 								$dbHost,
